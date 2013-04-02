@@ -3,3 +3,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data/app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'data/db_repo')
+
+spot_data = os.path.join(basedir, "spot_data.json")
+spot_message_db = os.path.join(basedir, "spot_messages.db")
+
+active_trip_id = 1
