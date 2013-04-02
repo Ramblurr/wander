@@ -43,8 +43,9 @@ def purge():
             os.remove(os.path.join(root, name))
         for name in dirs:
             os.rmdir(os.path.join(root, name))
-        if SQLALCHEMY_DATABASE_URI.startswith("sqlite:///"):
-            os.remove(SQLALCHEMY_DATABASE_URI[len("sqlite:///"):])
+    os.rmdir(SQLALCHEMY_MIGRATE_REPO)
+    if SQLALCHEMY_DATABASE_URI.startswith("sqlite:///"):
+        os.remove(SQLALCHEMY_DATABASE_URI[len("sqlite:///"):])
 
 
 
