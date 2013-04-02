@@ -32,7 +32,3 @@ for m in messages:
 db.session.commit()
 
 print "  Success. Imported %s messages" %( len(messages) )
-
-
-for p in models.Point.query.all():
-    print p
