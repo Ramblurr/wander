@@ -8,3 +8,7 @@ spot_data = os.path.join(basedir, "spot_data.json")
 spot_message_db = os.path.join(basedir, "spot_messages.db")
 
 active_trip_id = 1
+
+cartodb_api_key = None
+cartodb_domain = None
+cartodb_table = None
