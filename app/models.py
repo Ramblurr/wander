@@ -31,7 +31,11 @@ class Point(db.Model):
     def __repr__(self):
         return '<Point %s,%s:%s (trip: %s)>' %(self.latitude, self.longitude, self.message, self.trip_id)
 
-
+class CartoDbSyncEntry(db.Model):
+    __tablename__ = "cartodb_log"
+    id = db.Column(db.Integer, primary_key=True)
+    point_id = db.Column(db.Integer, db.ForeignKey('point.id'))
+    timestamp = db.Column(db.DateTime)
 
 class TypeEncoder(json.JSONEncoder):
     def default(self, o):
