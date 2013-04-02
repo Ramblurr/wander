@@ -1,7 +1,9 @@
 # Wander
 
-An adventure tracking and visualization platform ala SPOT Adventures, but
-completely customizable and 100% yours.
+An adventure tracking and visualization platform. Wander is an alternative to
+SPOT Adventures; completely customizable and 100% yours.
+
+*WANDER IS UNDER DEVELOPMENT*
 
 **Features**
 
@@ -27,7 +29,7 @@ completely customizable and 100% yours.
 
 4. CartoDB syncher
 
-    Periodically syncs the trip data with a cartodb table.
+    Syncs geo data with a [cartodb](http://cartodb.com) table.
 
 ### Data
 
@@ -40,17 +42,31 @@ completely customizable and 100% yours.
 SPOT messages with `messageType` of `TRACK` are treated as points in a path.
 All other messages are treated as waypoints displayed on the map.
 
-**On cartodb syncing**
+**On Cartodb Syncing**
 
 Paths are added as MultiLineStrings and all other points are added as single points.
 
 The following columns are used:
 
-message - string
-happened_at - date
-the_geom - lat,long or geojson repr
+* message - string
+* happened_at - date
+* the_geom - lat,long or geojson repr
 
+## Depdendenices
 
-NOTES:
-email in with
-http://www.cloudmailin.com/
+Everything in requirements.pip, just use `pip install requirements.pip` as well
+as [spot-persist](https://github.com/Ramblurr/spot-persist)
+
+## License & Custom Work
+
+This project is licensed under the AGPL v3.
+
+If you want a customized version of Wander for your adventure or expedition,
+email me (me@caseylink.com). I am available for freelance and consulting
+projects.
+
+## Contributions
+
+Bug reports, suggestions, and patches are welcome! Please use the github issue
+tracker.
+
