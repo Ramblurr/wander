@@ -1,1 +1,1 @@
-trips_db = 'db-trips.db'
+trips_db = 'data/db-trips.db'
