@@ -28,6 +28,9 @@ class Point(db.Model):
     dateTime = db.Column(db.Text(), nullable=False)
     altitude = db.Column(db.Text(), nullable=True)
 
+    def __repr__(self):
+        return '<Point %s,%s:%s (trip: %s)>' %(self.latitude, self.longitude, self.message, self.trip_id)
+
 
 
 class TypeEncoder(json.JSONEncoder):
