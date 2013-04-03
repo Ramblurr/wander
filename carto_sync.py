@@ -23,7 +23,7 @@ points = models.Point.query.filter(~models.Point.id.in_(synced_ids)).all()
 
 print "Found %s unsynced points, syncing..." % (len(points))
 
-carto_trans = CartoTransaction(config.cartodb_api_key, config.cartodb_domain, config.cartodb_table)
+carto_trans = CartoTransaction(config.cartodb_api_key, config.cartodb_domain, config.cartodb_table, debug=config.debug)
 for p in points:
     carto_trans.insert_point(p)
     mark_synced(p)
