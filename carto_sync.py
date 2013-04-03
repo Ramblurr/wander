@@ -1,31 +1,11 @@
-from cartodb import CartoDBAPIKey, CartoDBException
-from sqlalchemy.orm import aliased
+from cartodbutils import CartoTransaction
+from cartodb import CartoDBException
 import datetime
 
 from app import db, models
 import config
 
 now = datetime.datetime.now()
-
-class CartoTransaction(object):
-
-    def __init__(self):
-        self.cl = CartoDBAPIKey(config.cartodb_api_key, config.cartodb_domain)
-        self.queries = []
-
-    def commit(self):
-
-        stmts = "\n".join(self.queries)
-        query = "BEGIN;\n"
-        query += stmts
-        query += "COMMIT;\n"
-        print query
-        print self.cl.sql(query)
-
-    def insert_point(self, point):
-        insert = "insert into %s ( the_geom, happened_at, message ) values (ST_SetSRID(ST_Point(%s,%s), 4326), '%s', '%s');" % ( config.cartodb_table, point.longitude, point.latitude, point.dateTime, point.message )
-        self.queries.append(insert)
-
 
 def mark_synced(point):
     entry = models.CartoDbSyncEntry()
@@ -43,7 +23,7 @@ points = models.Point.query.filter(~models.Point.id.in_(synced_ids)).all()
 
 print "Found %s unsynced points, syncing..." % (len(points))
 
-carto_trans = CartoTransaction()
+carto_trans = CartoTransaction(config.cartodb_api_key, config.cartodb_domain, config.cartodb_table)
 for p in points:
     carto_trans.insert_point(p)
     mark_synced(p)
