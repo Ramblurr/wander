@@ -1,6 +1,10 @@
 from cartodb import CartoDBAPIKey
+import json
+import datetime
 
 class CartoTransaction(object):
+
+    _SQL_INSERT = "insert into %s ( the_geom, happened_at, message ) values( %s, %s, %s);"
 
     def __init__(self, api_key, domain, table, debug = False):
         self.cl = CartoDBAPIKey(api_key, domain)
@@ -14,14 +18,34 @@ class CartoTransaction(object):
         query = "BEGIN;\n"
         query += stmts
         query += "COMMIT;\n"
-        resp = self.cl.sql(query)
         if self.debug:
             print query
+        resp = self.cl.sql(query)
+        if self.debug:
             print resp
 
+    def _craft_insert(self, the_geom, happened_at, message):
+        if happened_at is None:
+            happened_at = ''
+        if message is None:
+            message = ''
+
+        def quote(s):
+            return "'" + s + "'"
+
+        return self._SQL_INSERT % (self.table, the_geom , quote(happened_at), quote(message))
+
     def insert_point(self, point):
-        insert = "insert into %s ( the_geom, happened_at, message ) values (ST_SetSRID(ST_Point(%s,%s), 4326), '%s', '%s');" % ( self.table, point.longitude, point.latitude, point.dateTime, point.message )
+        the_geom = "ST_SetSRID(ST_Point(%s,%s), 4326)" %(point.longitude, point.latitude)
+        insert = self._craft_insert(the_geom, point.dateTime, point.message)
         self.queries.append(insert)
+
+    def update_line(self, trip_id, coords):
+        geojson = json.dumps({ "type" : "MultiLineString", "coordinates": [coords] })
+        the_geom = "ST_SetSRID(ST_GeomFromGeoJSON('%s'), 4326)" % (geojson)
+        insert = self._craft_insert(the_geom, str(datetime.datetime.now()), None)
+        self.queries.append(insert)
+
 
 
 

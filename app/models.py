@@ -20,16 +20,23 @@ class Trip(db.Model):
 
 
 class Point(db.Model):
+    TypeTrack = 'track'
+    TypeCheckin = 'checkin'
+    _types = set([TypeTrack, TypeCheckin])
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'), nullable=False)
+    point_type = db.Column(db.Enum(*_types), nullable=False)
     message = db.Column('message', db.Text(), default=u'')
     latitude = db.Column(db.Float(), nullable=False)
     longitude = db.Column(db.Float(), nullable=False)
     dateTime = db.Column(db.Text(), nullable=False)
     altitude = db.Column(db.Text(), nullable=True)
 
+    def simple(self):
+        return ( self.longitude, self.latitude )
+
     def __repr__(self):
-        return '<Point %s,%s:%s (trip: %s)>' %(self.latitude, self.longitude, self.message, self.trip_id)
+        return '<Point %s,%s:%s (trip: %s)>' %(self.latitude, self.longitude, self.point_type, self.trip_id)
 
 class CartoDbSyncEntry(db.Model):
     __tablename__ = "cartodb_log"

@@ -23,11 +23,21 @@ for m in messages:
     point.longitude = m['longitude']
     point.altitude = m['altitude']
     point.dateTime = m['dateTime']
-
     if m.has_key('messageContent'):
         point.message = m['messageContent']
 
-    db.session.add(point)
+    msg_t = m['messageType']
+    if msg_t == 'TRACK':
+        t = models.Point.TypeTrack
+    elif msg_t == 'OK':
+        t = models.Point.TypeCheckin
+    else:
+        t = None
+        print('found unknown message type: %s' % msg_t)
+
+    if t is not None:
+        point.point_type = t
+        db.session.add(point)
 
 db.session.commit()
 
