@@ -31,6 +31,10 @@ SPOT Adventures; completely customizable and 100% yours.
 
     Syncs geo data with a [cartodb](http://cartodb.com) table.
 
+5. Android App
+
+    Upload tracks or waypoints with metadata (messages, images, etc)
+
 ### Data
 
 * **Points** - discreet location events with associated metadata (e.g., photo, message)
