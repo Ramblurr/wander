@@ -1,0 +1,9 @@
+CARTODB_KEY             = "foo"
+CARTODB_DOMAIN          = "bar"
+CARTODB_TABLE           = "yummy"
+ACTIVE_TRIP             = 1
+SQLALCHEMY_MIGRATE_REPO = "db_repo"
+SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+SPOT_DATA               = "spot_data.json"
+SPOT_MSG_DB             = "spot_messages.db"
+DEBUG                   = True

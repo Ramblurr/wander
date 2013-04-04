@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-from cartodbutils import CartoTransaction
+from wander.cartodbutils import CartoTransaction
 from cartodb import CartoDBException
-import datetime
+import datetime, sys
 
-from wander.app import db, models
-import config
+from wander.app import app, db, models
 
 now = datetime.datetime.now()
 
@@ -24,7 +23,7 @@ points = models.Point.query.filter(~models.Point.id.in_(synced_ids)).all()
 
 print "Found %s unsynced points, syncing..." % (len(points))
 
-carto_trans = CartoTransaction(config.cartodb_api_key, config.cartodb_domain, config.cartodb_table, debug=config.debug)
+carto_trans = CartoTransaction(app.config['CARTODB_KEY'], app.config['CARTODB_DOMAIN'], app.config['CARTODB_TABLE'], debug=app.debug)
 track_trip_ids = set()
 for p in points:
     if p.point_type == models.Point.TypeCheckin:
