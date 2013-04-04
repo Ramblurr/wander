@@ -2,7 +2,7 @@ from flask import make_response
 from flask.ext.restful import Resource, Api, abort, reqparse
 import json
 
-from app import app, api, db
+from wander.app import app, api, db
 import models
 
 def output_json(data, code, headers=None):

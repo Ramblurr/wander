@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+import os
+
+if not os.environ.has_key('WANDER_PATH'):
+    os.environ['WANDER_PATH'] = os.getcwd()
+
+from wander.app import app
+app.run(debug = True)

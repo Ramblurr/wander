@@ -1,5 +1,5 @@
 import json
-from app import db
+from wander.app import db
 
 metadata = db.MetaData()
 
