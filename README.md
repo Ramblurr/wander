@@ -5,6 +5,9 @@ SPOT Adventures; completely customizable and 100% yours.
 
 *WANDER IS UNDER DEVELOPMENT*
 
+[Live-demo of the generated map](http://elusivetruth.net/) or checkout the
+[full screen version](http://elusivetruth.net/map/index.html)
+
 **Features**
 
 * Automatically plot your adventure progress on a gorgeous map
