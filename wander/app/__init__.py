@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask.ext.admin import Admin
 from flask.ext import restful
 from flask.ext.sqlalchemy import SQLAlchemy
 from migrate.exceptions import DatabaseAlreadyControlledError
@@ -11,6 +12,7 @@ app.config.from_pyfile('config.cfg', silent=True)
 app.config.from_envvar('WANDER_CONFIG', silent=True)
 
 api = restful.Api(app)
+admin = Admin(app, name = "Wander Admin")
 db = SQLAlchemy(app)
 
 def start_jobs():
@@ -34,6 +36,6 @@ def bootstrap():
 
 # init routing
 import views
-
+import admin_views
 
 
