@@ -24,6 +24,7 @@ class WanderJob(object):
 sched = Scheduler()
 
 
+@sched.interval_schedule(seconds=5)
 def job_cartosync():
     job = CartoSyncJob(verbose = True)
     job.start()
