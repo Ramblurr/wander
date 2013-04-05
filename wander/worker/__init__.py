@@ -31,7 +31,7 @@ def job_cartosync():
 @sched.interval_schedule(seconds=5)
 def job_spotfetch():
     json = app.config['SPOT_DATA']
-    archive = "sqlite:///:memory"
+    archive = "sqlite:///:memory:"
     job = SpotFetchJob(json_file = json, archive_db = archive, verbose = True)
     job.start()
 

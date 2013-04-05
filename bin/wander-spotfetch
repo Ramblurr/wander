@@ -2,6 +2,6 @@
 from wander.worker import spotfetch
 
 if __name__ == '__main__':
-    f = spotfetch.SpotFetchJob(json_file = "", archive_db = "", verbose = True)
+    f = spotfetch.SpotFetchJob(json_file = "spot_data.json", archive_db = "sqlite:///:memory", verbose = True)
     f.start()
 
