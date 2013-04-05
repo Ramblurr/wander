@@ -7,14 +7,15 @@ app = Flask(__name__, instance_relative_config=True, instance_path=os.environ['W
 
 app.config.from_pyfile('config.py', silent=True)
 app.config.from_pyfile('config.cfg', silent=True)
-app.config.from_envvar('WANDER_CONFIG')
+app.config.from_envvar('WANDER_CONFIG', silent=True)
 
 api = restful.Api(app)
 db = SQLAlchemy(app)
 
-# start background tasks
-import wander.worker
-wander.worker.start()
+@app.before_first_request
+def start_jobs():
+    import wander.worker
+    wander.worker.start()
 
 # init routing
 import views
