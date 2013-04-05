@@ -5,10 +5,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, instance_relative_config=True, instance_path=os.environ['WANDER_PATH'])
 
-try:
-    app.config.from_pyfile('config.py')
-except Exception:
-    app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('config.py', silent=True)
+app.config.from_pyfile('config.cfg', silent=True)
+app.config.from_envvar('WANDER_CONFIG')
 
 api = restful.Api(app)
 db = SQLAlchemy(app)
