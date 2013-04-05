@@ -14,6 +14,9 @@ class CartoTransaction(object):
 
     def commit(self):
 
+        if len(self.queries) == 0:
+            return
+
         stmts = "\n".join(self.queries)
         query = "BEGIN;\n"
         query += stmts

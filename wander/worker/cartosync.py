@@ -19,7 +19,6 @@ class CartoSyncJob(WanderJob):
         synced = models.CartoDbSyncEntry.query.all()
         synced_ids = [ p.point_id for p in synced ]
         points = models.Point.query.filter(~models.Point.id.in_(synced_ids)).all()
-        self.log("Found %s unsynced points, syncing..." % (len(points)))
         return points
 
     def prepare_carto(self, points):
@@ -45,6 +44,11 @@ class CartoSyncJob(WanderJob):
 
     def _run(self):
         points = self.new_points()
+        if len(points) == 0:
+            self.log("Found 0 new points. Finishing.")
+            return
+        else:
+            self.log("Found %s unsynced points, syncing..." % (len(points)))
         carto_trans = self.prepare_carto(points)
 
         try:
