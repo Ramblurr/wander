@@ -9,7 +9,11 @@ app.config.from_pyfile('config.cfg')
 api = restful.Api(app)
 db = SQLAlchemy(app)
 
+# start background tasks
+import wander.worker
+wander.worker.start()
 
+# init routing
 import views
 
 
