@@ -1,4 +1,13 @@
 import os, imp
+from sqlalchemy.engine import reflection
+from sqlalchemy.schema import (
+    MetaData,
+    Table,
+    DropTable,
+    ForeignKeyConstraint,
+    DropConstraint,
+    )
+
 from wander.app import app, db
 from migrate.versioning import api
 
@@ -35,13 +44,41 @@ def downgrade():
     api.downgrade(app.config['SQLALCHEMY_DATABASE_URI'], app.config['SQLALCHEMY_MIGRATE_REPO'], v - 1)
     print 'Current database version: ' + str(api.db_version(app.config['SQLALCHEMY_DATABASE_URI'], app.config['SQLALCHEMY_MIGRATE_REPO']))
 
+def drop_all():
+    inspector = reflection.Inspector.from_engine(db.engine)
+    metadata = MetaData()
+    tbs = []
+    all_fks = []
+    for table_name in inspector.get_table_names():
+        fks = []
+        for fk in inspector.get_foreign_keys(table_name):
+            if not fk['name']:
+                continue
+            fks.append(
+                ForeignKeyConstraint((),(),name=fk['name'])
+                )
+        t = Table(table_name,metadata,*fks)
+        tbs.append(t)
+        all_fks.extend(fks)
+
+    for fkc in all_fks:
+        db.session.execute(DropConstraint(fkc))
+
+    for table in tbs:
+        db.session.execute(DropTable(table))
+
+
 def purge():
+    drop_all()
     for root, dirs, files in os.walk(app.config['SQLALCHEMY_MIGRATE_REPO'], topdown=False):
         for name in files:
             os.remove(os.path.join(root, name))
         for name in dirs:
             os.rmdir(os.path.join(root, name))
-    os.rmdir(app.config['SQLALCHEMY_MIGRATE_REPO'])
+    try:
+        os.rmdir(app.config['SQLALCHEMY_MIGRATE_REPO'])
+    except OSError:
+        pass
     if is_sqlite():
         os.remove(app.config['SQLALCHEMY_DATABASE_URI'][len("sqlite:///"):])
 

@@ -19,6 +19,8 @@ def start_jobs():
 
 def init_db():
     import first_time
+    if os.environ.has_key('WANDER_WIPE'):
+        first_time.purge()
     try:
         first_time.create()
     except DatabaseAlreadyControlledError:
