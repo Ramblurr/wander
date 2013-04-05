@@ -39,9 +39,9 @@ class SpotFetchJob(WanderJob):
 
             msg_t = m['messageType']
             if msg_t == 'TRACK':
-                t = models.Point.TypeTrack
+                t = models.PointType.track
             elif msg_t == 'OK':
-                t = models.Point.TypeCheckin
+                t = models.PointType.checkin
             else:
                 t = None
                 self.log('found unknown message type: %s' % msg_t)

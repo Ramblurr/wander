@@ -1,5 +1,6 @@
 import json
 from wander.app import db
+from wander.app.decl_enum import DeclEnum
 
 metadata = db.MetaData()
 
@@ -18,6 +19,10 @@ class Trip(db.Model):
     def out(self):
         return { "name": self.name, "id": self.id }
 
+class PointType(DeclEnum):
+    track = 'track', 'Tracking Point'
+    checkin = 'checkin', 'Check In Point'
+    unknown = 'unknown', 'Point'
 
 class Point(db.Model):
     TypeTrack = 'track'
@@ -25,7 +30,7 @@ class Point(db.Model):
     _types = set([TypeTrack, TypeCheckin])
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'), nullable=False)
-    point_type = db.Column(db.Enum(*_types, name="PointType"), nullable=False)
+    point_type = db.Column(PointType.db_type(), default=PointType.unknown, nullable=False)
     message = db.Column('message', db.Text(), default=u'')
     latitude = db.Column(db.Float(), nullable=False)
     longitude = db.Column(db.Float(), nullable=False)
