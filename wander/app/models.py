@@ -25,7 +25,7 @@ class Point(db.Model):
     _types = set([TypeTrack, TypeCheckin])
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'), nullable=False)
-    point_type = db.Column(db.Enum(*_types), nullable=False)
+    point_type = db.Column(db.Enum(*_types, name="PointType"), nullable=False)
     message = db.Column('message', db.Text(), default=u'')
     latitude = db.Column(db.Float(), nullable=False)
     longitude = db.Column(db.Float(), nullable=False)
