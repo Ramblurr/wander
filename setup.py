@@ -16,10 +16,10 @@ setup(name='wander',
 
     install_requires=[
         'Flask>=0.8',
-        'flask-restful',
-        'flask-sqlalchemy',
+        'flask-restful>=0.1.7',
+        'flask-sqlalchemy>=0.16',
         'sqlalchemy>=0.7.2',
-        'sqlalchemy-migrate',
+        'sqlalchemy-migrate>=0.7.2',
         'cartodb',
         'spot-persist',
         'apscheduler',
