@@ -22,6 +22,7 @@ setup(name='wander',
         'sqlalchemy-migrate',
         'cartodb',
         'spot-persist',
+        'apscheduler',
     ],
 
     dependency_links=[
