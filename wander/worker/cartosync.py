@@ -3,7 +3,7 @@ from cartodb import CartoDBException
 import datetime
 
 from wander.app import app, db, models
-import WanderJob
+from wander.worker import WanderJob
 
 class CartoSyncJob(WanderJob):
     now = datetime.datetime.now()

@@ -1,13 +1,13 @@
 from spotpersist import parse_json, sql
 from wander.app import app, db, models
 
-import WanderJob
+from wander.worker import WanderJob
 
 class SpotFetchJob(WanderJob):
     def __init__(self, json_file, archive_db, *args, **kwargs):
+        WanderJob.__init__(self, *args, **kwargs)
         self.json_file = json_file
         self.archive_db = archive_db
-        WanderJob.__init__(self, *args, **kwargs)
 
     def parse_data(self):
 
