@@ -28,15 +28,15 @@ class CartoSyncJob(WanderJob):
 
         # process points by type and collect track points
         for p in points:
-            if p.point_type == models.Point.TypeCheckin:
+            if p.point_type == models.PointType.checkin:
                 carto_trans.insert_point(p)
-            elif p.point_type == models.Point.TypeTrack:
+            elif p.point_type == models.PointType.track:
                 track_trip_ids.add(p.trip_id)
             self.mark_synced(p)
 
         # process collected track points into a line
         for trip_id in track_trip_ids:
-            track_points = models.Point.query.filter(models.Point.trip_id == trip_id and models.Point.point_type == models.Point.TypeTrack).order_by(db.asc(models.Point.dateTime)).all()
+            track_points = models.Point.query.filter(models.Point.trip_id == trip_id and models.Point.point_type == models.PointType.track).order_by(db.asc(models.Point.dateTime)).all()
             coords = [ p.simple() for p in track_points ]
             carto_trans.update_line(trip_id, coords)
 
