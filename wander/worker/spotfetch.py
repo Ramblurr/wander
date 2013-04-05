@@ -27,13 +27,16 @@ class SpotFetchJob(WanderJob):
         self.log("  Success. Archived %s messages" % (len(messages)))
 
     def import_messages(self, messages):
-        for m in messages:
+        new_messages = filter(lambda msg: len(models.Point.query.filter_by(unixTime=msg['unixTime']).all()) == 0 , messages)
+        self.log("Importing %s new messages" %(len(new_messages)))
+        for m in new_messages:
             point = models.Point()
             point.trip_id = app.config['ACTIVE_TRIP']
             point.latitude = m['latitude']
             point.longitude = m['longitude']
             point.altitude = m['altitude']
             point.dateTime = m['dateTime']
+            point.unixTime = m['unixTime']
             if m.has_key('messageContent'):
                 point.message = m['messageContent']
 
@@ -59,7 +62,6 @@ class SpotFetchJob(WanderJob):
         self.init_archive()
         self.populate_archive(messages)
         self.import_messages(messages)
-        self.log("Success. Imported %s messages" %( len(messages) ))
 
 
 

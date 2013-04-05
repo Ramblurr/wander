@@ -29,6 +29,7 @@ class Point(db.Model):
     latitude = db.Column(db.Float(), nullable=False)
     longitude = db.Column(db.Float(), nullable=False)
     dateTime = db.Column(db.Text(), nullable=False)
+    unixTime = db.Column(db.Integer(), nullable=False)
     altitude = db.Column(db.Text(), nullable=True)
 
     def simple(self):
