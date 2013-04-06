@@ -16,7 +16,7 @@ setup(name='wander',
 
     install_requires=[
         'Flask>=0.8',
-        'flask-restful>=0.1.7',
+        'flask-restless',
         'flask-admin',
         'flask-sqlalchemy>=0.16',
         'flask-login',

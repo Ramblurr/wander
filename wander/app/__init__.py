@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, g
 
 from flask.ext.admin import Admin
-from flask.ext import restful
+import flask.ext.restless
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, current_user
 from flask.ext.openid import OpenID
@@ -25,7 +25,6 @@ app.config.from_envvar('WANDER_CONFIG', silent=True)
 app.logger.addHandler(handler)
 
 Bootstrap(app)
-api = restful.Api(app)
 admin = Admin(app, name = "Wander Admin")
 db = SQLAlchemy(app)
 lm = LoginManager()
@@ -66,6 +65,7 @@ def before_request():
 # init routing
 import views
 import login
+import api
 import admin_views
 
 
