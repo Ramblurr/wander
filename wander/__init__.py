@@ -1,4 +1,11 @@
 import functools
+"""
+
+Monkey patches json and simplejson to support encoding of your custom types.
+Simply implement the __json__ attribute or method in your class.
+
+Edited Version Of: https://bitbucket.org/marcinkuzminski/ext-json
+"""
 
 def _obj_dump(obj):
     """
