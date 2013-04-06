@@ -67,6 +67,9 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
+        if app.debug and "test.com" in form.openid.data:
+            return test_login(form.openid.data)
+
         session['remember_me'] = form.remember_me.data
         return oid.try_login(form.openid.data, ask_for = ['nickname', 'email'])
     return render_template('login.html',
@@ -93,3 +96,20 @@ def after_login(resp):
         session.pop('remember_me', None)
     login_user(user, remember = remember_me)
     return redirect(request.args.get('next') or url_for('index'))
+
+def test_login(email):
+    if not app.debug:
+        return 400
+    user = User.query.filter_by(email = email).first()
+    if user is None:
+        username = email.split('@')[0]
+        user = User(username = username, email = email)
+        db.session.add(user)
+        db.session.commit()
+    remember_me = False
+    if 'remember_me' in session:
+        remember_me = session['remember_me']
+        session.pop('remember_me', None)
+    login_user(user, remember = remember_me)
+    return redirect(request.args.get('next') or url_for('index'))
+

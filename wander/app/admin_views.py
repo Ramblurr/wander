@@ -8,5 +8,6 @@ class MyView(BaseView):
     def index(self):
         return self.render('index.html')
 
+admin.add_view(ModelView(models.User, db.session))
 admin.add_view(ModelView(models.Trip, db.session))
 admin.add_view(ModelView(models.Point, db.session))

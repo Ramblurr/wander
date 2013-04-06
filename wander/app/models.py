@@ -8,7 +8,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(64), unique = True)
     email = db.Column(db.String(120), unique = True)
-    trips = db.relationship('Trip', backref = 'user', lazy = 'dynamic')
+    active_trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'))
+    active_trip = db.relationship('Trip', primaryjoin='User.active_trip_id==Trip.id')
+    trips = db.relationship('Trip', backref = 'user')
 
     def is_authenticated(self):
         return True
@@ -29,8 +31,6 @@ class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text(), nullable=False)
     description = db.Column(db.Text(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
     points = db.relationship('Point', backref='trip', lazy='dynamic')
 
     def __repr__(self):
