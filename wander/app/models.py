@@ -25,16 +25,16 @@ class User(db.Model):
         return unicode(self.id)
 
     def __repr__(self):
-        return '<User %r>' % (self.username)
+        return 'User %r>' % (self.username)
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text(), nullable=False)
     description = db.Column(db.Text(), nullable=False)
-    points = db.relationship('Point', backref='trip', lazy='dynamic')
+    points = db.relationship('Point', backref='trip')
 
     def __repr__(self):
-        return '<Trip %r>' % self.name
+        return 'Trip %r>' % self.name
 
     def out(self):
         return { "name": self.name, "id": self.id }

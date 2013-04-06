@@ -8,6 +8,13 @@ class MyView(BaseView):
     def index(self):
         return self.render('index.html')
 
-admin.add_view(ModelView(models.User, db.session))
-admin.add_view(ModelView(models.Trip, db.session))
-admin.add_view(ModelView(models.Point, db.session))
+class PKView(ModelView):
+    column_display_pk = True
+
+class TripView(PKView):
+    column_hide_backrefs = False
+    column_list = ('id', 'name', 'description', 'user')
+
+admin.add_view(PKView(models.User, db.session))
+admin.add_view(TripView(models.Trip, db.session))
+admin.add_view(PKView(models.Point, db.session))
