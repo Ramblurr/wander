@@ -1,22 +1,28 @@
-from apscheduler.scheduler import Scheduler
-import logging
-
+from apscheduler.scheduler import Scheduler, logger as apslogger
 from wander.app import app
-logging.basicConfig()
+import logging as log
+
+log_handler= log.FileHandler('worker.log')
+apslogger.addHandler(log_handler)
 
 class WanderJob(object):
     def __init__(self, verbose = False):
         self.verbose = verbose
         self.name = self.__class__.__name__
+        self.logger = log.getLogger(__name__)
+        self.logger.addHandler(log_handler)
+        #self.logger.basicConfig(filename='%s.log'%(self.name), level =log.DEBUG)
 
-    def log(self, msg):
-        if self.verbose:
-            print("%s: %s" %(self.name, msg))
+    def info(self, msg):
+        self.logger.info("%s: %s" %(self.name, msg))
+
+    def debug(self, msg):
+        self.logger.debug("%s: %s" %(self.name, msg))
 
     def start(self):
-        self.log("++Starting++")
+        self.info("Running..")
         self._run()
-        self.log("--Finished--")
+        self.info("Finished")
 
     def _run():
         pass

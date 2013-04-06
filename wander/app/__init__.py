@@ -1,15 +1,21 @@
 import os
+import logging as log
+from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask.ext.admin import Admin
 from flask.ext import restful
 from flask.ext.sqlalchemy import SQLAlchemy
 from migrate.exceptions import DatabaseAlreadyControlledError
 
+handler = RotatingFileHandler('access.log', maxBytes=10000, backupCount=1)
+handler.setLevel(log.INFO)
+
 app = Flask(__name__, instance_relative_config=True, instance_path=os.environ['WANDER_PATH'])
 
 app.config.from_pyfile('config.py', silent=True)
 app.config.from_pyfile('config.cfg', silent=True)
 app.config.from_envvar('WANDER_CONFIG', silent=True)
+app.logger.addHandler(handler)
 
 api = restful.Api(app)
 admin = Admin(app, name = "Wander Admin")

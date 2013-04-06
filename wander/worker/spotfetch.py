@@ -16,7 +16,7 @@ class SpotFetchJob(WanderJob):
                 metadata, messages = parse_json(data)
                 return metadata, messages
         except IOError, e:
-            self.log("Error parsing data: %s " % (e))
+            self.debug("Error parsing data: %s " % (e))
             return None, None
 
     def init_archive(self):
@@ -24,11 +24,11 @@ class SpotFetchJob(WanderJob):
 
     def populate_archive(self, messages):
         sql.populate(messages, update = True)
-        self.log("  Success. Archived %s messages" % (len(messages)))
+        self.debug("  Success. Archived %s messages" % (len(messages)))
 
     def import_messages(self, messages):
         new_messages = filter(lambda msg: len(models.Point.query.filter_by(unixTime=msg['unixTime']).all()) == 0 , messages)
-        self.log("Importing %s new messages" %(len(new_messages)))
+        self.debug("Importing %s new messages" %(len(new_messages)))
         for m in new_messages:
             point = models.Point()
             point.trip_id = app.config['ACTIVE_TRIP']
@@ -47,7 +47,7 @@ class SpotFetchJob(WanderJob):
                 t = models.PointType.checkin
             else:
                 t = None
-                self.log('found unknown message type: %s' % msg_t)
+                self.debug('found unknown message type: %s' % msg_t)
 
             if t is not None:
                 point.point_type = t

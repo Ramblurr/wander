@@ -39,22 +39,22 @@ class CartoSyncJob(WanderJob):
             coords = [ p.simple() for p in track_points ]
             carto_trans.update_line(trip_id, coords)
 
-        self.log("%s trips need track path updating" % len(track_trip_ids))
+        self.debug("%s trips need track path updating" % len(track_trip_ids))
         return carto_trans
 
     def _run(self):
         points = self.new_points()
         if len(points) == 0:
-            self.log("Found 0 new points. Finishing.")
+            self.debug("Found 0 new points. Finishing.")
             return
         else:
-            self.log("Found %s unsynced points, syncing..." % (len(points)))
+            self.debug("Found %s unsynced points, syncing..." % (len(points)))
         carto_trans = self.prepare_carto(points)
 
         try:
             carto_trans.commit()
             db.session.commit()
         except CartoDBException, e:
-            self.log("Error: carto commit failed", e)
+            self.debug("Error: carto commit failed", e)
             db.session.rollback()
 
