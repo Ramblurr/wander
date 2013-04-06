@@ -4,9 +4,32 @@ from wander.app.decl_enum import DeclEnum
 
 metadata = db.MetaData()
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(64), unique = True)
+    email = db.Column(db.String(120), unique = True)
+    trips = db.relationship('Trip', backref = 'user', lazy = 'dynamic')
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
+
+    def __repr__(self):
+        return '<User %r>' % (self.username)
+
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text(), nullable=False)
+    description = db.Column(db.Text(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     points = db.relationship('Point', backref='trip', lazy='dynamic')
 
