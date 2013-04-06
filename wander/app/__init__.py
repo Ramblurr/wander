@@ -1,16 +1,17 @@
 import os
 import logging as log
 from logging.handlers import RotatingFileHandler
-from flask import Flask
+from flask import Flask, g
 
 from flask.ext.admin import Admin
 from flask.ext import restful
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 from flask.ext.openid import OpenID
 from flask.ext.bootstrap import Bootstrap
 
 from migrate.exceptions import DatabaseAlreadyControlledError
+
 
 handler = RotatingFileHandler('access.log', maxBytes=10000, backupCount=1)
 handler.setLevel(log.INFO)
@@ -51,8 +52,20 @@ def bootstrap():
     init_db()
     start_jobs()
 
+# important settings
+@lm.user_loader
+def load_user(id):
+    from models import User
+    return User.query.get(int(id))
+
+@app.before_request
+def before_request():
+    g.user = current_user
+
+
 # init routing
 import views
+import login
 import admin_views
 
 
