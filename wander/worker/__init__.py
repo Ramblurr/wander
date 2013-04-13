@@ -11,6 +11,7 @@ class WanderJob(object):
         self.name = self.__class__.__name__
         self.logger = log.getLogger(__name__)
         self.logger.addHandler(log_handler)
+        self.logger.setLevel(log.DEBUG)
         #self.logger.basicConfig(filename='%s.log'%(self.name), level =log.DEBUG)
 
     def info(self, msg):
