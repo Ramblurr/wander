@@ -2,7 +2,8 @@ from apscheduler.scheduler import Scheduler, logger as apslogger
 from wander.app import app
 import logging as log
 
-log_handler= log.FileHandler('worker.log')
+log_file = 'worker.log'
+log_handler= log.FileHandler(log_file)
 apslogger.addHandler(log_handler)
 
 class WanderJob(object):
@@ -30,7 +31,6 @@ class WanderJob(object):
 
 sched = Scheduler()
 
-
 @sched.interval_schedule(seconds=5)
 def job_cartosync():
     job = CartoSyncJob(verbose = True)
@@ -48,6 +48,10 @@ def start():
     sched.configure()
     sched.start()
 
+jobs = [
+    { 'name': 'job_cartosync', 'func': job_cartosync, 'interval': { 'seconds': 5 }},
+    { 'name': 'job_spotfetch', 'func': job_spotfetch, 'interval': { 'seconds': 5 }},
+]
 
 from wander.worker.spotfetch import SpotFetchJob
 from wander.worker.cartosync import CartoSyncJob

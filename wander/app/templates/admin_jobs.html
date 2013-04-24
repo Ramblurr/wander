@@ -1,0 +1,53 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<h1>Running Jobs</h1>
+<table id=jobs class="table table-striped table-bordered model-list">
+  <tr>
+    <th class=id>ID</th>
+    <th class=job>Job</th>
+    <th class=trigger>Trigger</th>
+    <th class=args>Args, kwargs</th>
+    <th class=runs>Total runs / failed</th>
+    <th class=action>Action</th>
+  </tr>
+  {% for job in jobs %}
+  <tr>
+      <td><a href="{{url_for('.logs')}}">{{loop.index0}}</a></td>
+    <td>{{job.name}}</td>
+    <td>{{job.trigger}}</td>
+    <td>
+        {% if job.args %}
+        args={{job.args}}
+        {% endif %}
+        {% if job.kwargs %}
+        kwargs={{job.kwargs}}
+        {% endif %}
+    </td>
+    <td>{{job.runs}} / {{job.fails}}</td>
+    <td>
+      <form class="form-inline" method="post" action="{{url_for('.stop', job_id=loop.index0)}}">
+          <button type="submit" class="btn">Stop</button>
+      </form>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+<h1>Stopped Jobs</h1>
+<table id=jobs class="table table-striped table-bordered model-list">
+  <tr>
+    <th class=job>Job</th>
+    <th class=action>Action</th>
+  </tr>
+
+  {% for job in inactive %}
+  <tr>
+  <td>{{job}}</td>
+  <td>
+      <form class="form-inline" method="post" action="{{url_for('.start', job_name=job)}}">
+          <button type="submit" class="btn btn-primary">Start</button>
+      </form>
+  </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
